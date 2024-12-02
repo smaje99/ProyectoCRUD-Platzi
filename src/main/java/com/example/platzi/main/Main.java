@@ -1,5 +1,9 @@
 package com.example.platzi.main;
 
+import com.example.platzi.models.Employee;
+import com.example.platzi.repository.EmployeeRepository;
+import com.example.platzi.repository.Repository;
+
 public class Main {
   public static void main(String[] args) {
     /*
@@ -77,6 +81,13 @@ public class Main {
         }
     } */
 
-    
+    /* // Implementación del Pool de Conexiones
+    Repository<Employee> repository = new EmployeeRepository();
+
+    System.out.println("All employees");
+    repository.findAll().forEach(System.out::println);
+
+    System.out.println("Employee with id 6");
+    System.out.println(repository.findById(6)); */
   }
 }

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.platzi.models.Employee;
+import com.example.platzi.utils.DatabaseConnection;
 
 public class EmployeeRepository implements Repository<Employee> {
   private static final String SELECT_EMPLOYEES = """
@@ -34,18 +35,13 @@ public class EmployeeRepository implements Repository<Employee> {
     WHERE id = ?;
   """;
 
-  private final Connection connection;
-
-  public EmployeeRepository(Connection connection) {
-    this.connection = connection;
-  }
-
   @Override
   public Employee findById(final Integer id) {
     Employee employee = null;
 
     try (
-      PreparedStatement statement = this.connection.prepareStatement(SELECT_EMPLOYEE);
+      Connection connection = DatabaseConnection.getConnection();
+      PreparedStatement statement = connection.prepareStatement(SELECT_EMPLOYEE);
     ) {
       statement.setInt(1, id);
 
@@ -66,7 +62,8 @@ public class EmployeeRepository implements Repository<Employee> {
     final List<Employee> employees = new ArrayList<>();
 
     try (
-      Statement statement = this.connection.createStatement();
+      Connection connection = DatabaseConnection.getConnection();
+      Statement statement = connection.createStatement();
       ResultSet resultSet = statement.executeQuery(SELECT_EMPLOYEES);
     ) {
       while (resultSet.next()) {
@@ -82,7 +79,8 @@ public class EmployeeRepository implements Repository<Employee> {
   @Override
   public boolean save(final Employee employee) {
     try (
-      PreparedStatement statement = this.connection.prepareStatement(INSERT_EMPLOYEE);
+      Connection connection = DatabaseConnection.getConnection();
+      PreparedStatement statement = connection.prepareStatement(INSERT_EMPLOYEE);
     ) {
       statement.setString(1, employee.firstName());
       statement.setString(2, employee.paSurname());
@@ -101,7 +99,8 @@ public class EmployeeRepository implements Repository<Employee> {
   @Override
   public boolean update(final Employee t) {
     try(
-      PreparedStatement statement = this.connection.prepareStatement(UPDATE_EMPLOYEE);
+      Connection connection = DatabaseConnection.getConnection();
+      PreparedStatement statement = connection.prepareStatement(UPDATE_EMPLOYEE);
     ) {
       statement.setString(1, t.firstName());
       statement.setString(2, t.paSurname());
@@ -121,7 +120,8 @@ public class EmployeeRepository implements Repository<Employee> {
   @Override
   public boolean delete(final Employee t) {
     try (
-      PreparedStatement statement = this.connection.prepareStatement(DELETE_EMPLOYEE);
+      Connection connection = DatabaseConnection.getConnection();
+      PreparedStatement statement = connection.prepareStatement(DELETE_EMPLOYEE);
     ) {
       statement.setInt(1, t.id());
 
